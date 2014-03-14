@@ -24,14 +24,16 @@ public class MainActivity extends Activity implements OnClickListener {
 	GridView gridView;
 	private List<Integer> cubeList = new ArrayList<Integer>(16);
 	private BaseAdapter adapter;
-	private int[][] cubeNum = new int[][] { { -1, -1, -1, -1 }, { -1, -1, -1, -1 }, { -1, -1, -1, -1 },
-			{ -1, -1, -1, -1 } };
+	private int[][] cubeNum = new int[][] { { -1, -1, -1, -1 }, { -1, -1, -1, -1 },
+			{ -1, -1, -1, -1 }, { -1, -1, -1, -1 } };
 	private Button upBtn;
 	private Button leftBtn;
 	private Button downBtn;
 	private Button rightBtn;
 
 	private GestureDetector gesture;
+
+	public static Bitmap winMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		gridView = (GridView) findViewById(R.id.grid);
 		adapter = new CubeAdapter(this, cubeList);
 		gridView.setAdapter(adapter);
+		gridView.setDrawingCacheEnabled(true);
 		// gridView.setEnabled(false);
 		initData();
 	}
@@ -81,10 +84,13 @@ public class MainActivity extends Activity implements OnClickListener {
 		adapter.notifyDataSetChanged();
 		if (Arithmetic.isWin(cubeNum)) {
 			Toast.makeText(this, "你成功了", Toast.LENGTH_SHORT).show();
-			Bitmap bitmap = gridView.getDrawingCache();
+			winMap = gridView.getDrawingCache();
 			Intent intent = new Intent(this, WinActivity.class);
-			intent.putExtra("bitmap", bitmap);
 			startActivity(intent);
+
+		}
+		if (Arithmetic.isOver(cubeNum)) {
+			Toast.makeText(this, "game over", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -93,31 +99,19 @@ public class MainActivity extends Activity implements OnClickListener {
 		if (v == upBtn) {
 			boolean isOver = Arithmetic.next(cubeNum, Arithmetic.DIR_UP);
 			resetList();
-			if (isOver) {
-				Toast.makeText(this, "game over", Toast.LENGTH_LONG).show();
-			}
-
 		}
 		if (v == leftBtn) {
 			boolean isOver = Arithmetic.next(cubeNum, Arithmetic.DIR_LEFT);
 			resetList();
-			if (isOver) {
-				Toast.makeText(this, "game over", Toast.LENGTH_LONG).show();
-			}
 		}
 		if (v == downBtn) {
 			boolean isOver = Arithmetic.next(cubeNum, Arithmetic.DIR_DOWN);
 			resetList();
-			if (isOver) {
-				Toast.makeText(this, "game over", Toast.LENGTH_LONG).show();
-			}
 		}
 		if (v == rightBtn) {
 			boolean isOver = Arithmetic.next(cubeNum, Arithmetic.DIR_RIGHT);
 			resetList();
-			if (isOver) {
-				Toast.makeText(this, "game over", Toast.LENGTH_LONG).show();
-			}
+
 		}
 	}
 
@@ -148,19 +142,23 @@ public class MainActivity extends Activity implements OnClickListener {
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			final int FLING_MIN_DISTANCE = 70, FLING_MIN_VELOCITY = 200;
-			if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+			if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE
+					&& Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 				Arithmetic.next(cubeNum, Arithmetic.DIR_LEFT);
 				resetList();
 				return true;
-			} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+			} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE
+					&& Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 				Arithmetic.next(cubeNum, Arithmetic.DIR_RIGHT);
 				resetList();
 				return true;
-			} else if (e1.getY() - e2.getY() > FLING_MIN_DISTANCE && Math.abs(velocityY) > FLING_MIN_VELOCITY) {
+			} else if (e1.getY() - e2.getY() > FLING_MIN_DISTANCE
+					&& Math.abs(velocityY) > FLING_MIN_VELOCITY) {
 				Arithmetic.next(cubeNum, Arithmetic.DIR_UP);
 				resetList();
 				return true;
-			} else if (e2.getY() - e1.getY() > FLING_MIN_DISTANCE && Math.abs(velocityY) > FLING_MIN_VELOCITY) {
+			} else if (e2.getY() - e1.getY() > FLING_MIN_DISTANCE
+					&& Math.abs(velocityY) > FLING_MIN_VELOCITY) {
 				Arithmetic.next(cubeNum, Arithmetic.DIR_DOWN);
 				resetList();
 				return true;

@@ -7,9 +7,16 @@
     <ImageView
         android:id="@+id/win_img"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:rotation="15"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:rotationX="0.5"
+        android:rotationY="0.5" />
 
     <TextView
+        android:layout_marginTop="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/win_img"

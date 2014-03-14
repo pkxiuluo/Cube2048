@@ -67,7 +67,7 @@ public class Arithmetic {
 		return isChange;
 	}
 
-	private static boolean isOver(int[][] cubeNum) {
+	public static boolean isOver(int[][] cubeNum) {
 		int[][] my = new int[4][4];
 		for (int i = 0; i < 4; i++) {
 			System.arraycopy(cubeNum[i], 0, my[i], 0, 4);
