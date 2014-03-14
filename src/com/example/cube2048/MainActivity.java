@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -32,11 +33,21 @@ public class MainActivity extends Activity implements OnClickListener {
 	private Button rightBtn;
 
 	private GestureDetector gesture;
-
 	public static Bitmap winMap;
+	private static boolean setTheme;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+		if (currentapiVersion >= 11&&setTheme==false) {
+			setTheme=true;
+			getApplication().setTheme(android.R.style.Theme_Holo_Light);
+			requestWindowFeature(Window.FEATURE_ACTION_BAR);
+			this.finish();
+			startActivity(new Intent(this, MainActivity.class));
+		}else if(currentapiVersion< 11){
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		gesture = new GestureDetector(this, new Listener());
