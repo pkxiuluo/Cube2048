@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private GestureDetector gesture;
 	public static Bitmap winMap;
 	private static boolean setTheme;
+	private View rootView ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 		}
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		rootView = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
+		setContentView(rootView);
 		gesture = new GestureDetector(this, new Listener());
 		upBtn = (Button) findViewById(R.id.up_btn);
 		leftBtn = (Button) findViewById(R.id.left_btn);
@@ -68,12 +71,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		// gridView.setEnabled(false);
 		initData();
 	}
-
+	
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-		return super.dispatchTouchEvent(ev);
+		// TODO Auto-generated method stub
+		this.onTouchEvent(ev);
+		return true;
+//		return super.dispatchTouchEvent(ev);
 	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		gesture.onTouchEvent(event);
